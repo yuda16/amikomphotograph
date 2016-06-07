@@ -1,0 +1,135 @@
+<?php
+//Meng-include-kan file konfigurasi Database
+include('db_config.php');
+
+//Membuat artikel baru di database
+mysql_query("INSERT INTO `artikel`(judul, konten) VALUES('', '')"); // Menginput artikel baru ke database
+$id_artikel = mysql_insert_id(); // Menampung id artikel yang telah dibuat ke variabel id_artikel
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+	<title>Photograph</title>
+	<script language="JavaScript1.2" src="js/slide menu keren.js"></script>
+
+	<meta name="description" content="Tutorial jQuery Ajax - Membuat Fitur Auto Save dengan jQuery Ajax" />
+	<meta name="keywords" content="eplusgo,php,mysql,ajax,jquery,autosave" />
+  	<link rel="stylesheet" href="css/grid.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/form.css">
+	<script src="js/jquery-latest.min.js"></script>
+	<script src="js/script.js"></script>
+	<script src="js/jquery1.10.2.js"></script>
+	
+	    
+</head>
+<body>
+
+<script>
+resizereinit=true;
+menu[3] = {
+id:'menu3',
+bartext:'MENU',
+menupos:'left',
+kviewtype:'fixed',
+barbgcolor:"gray",
+barcolor:"#000000",
+barfontweight:"bold",
+bordercolor:'white',
+hdingbgcolor:"#ffffff",
+fontsize:'80%',
+linkheight:20 ,
+hdingwidth:210 ,
+menuItems:[
+["Facebook Developer", "https://www.facebook.com/Ryou.Ken.16?ref=bookmarks", ""],
+["Google Developer", "https://plus.google.com/u/0/100421295306894127163/posts", ""],
+["Facebook Designer", "https://www.facebook.com/profile.php?id=100006683086347&ref=ts&fref=ts",""],
+["Google Designer", "https://plus.google.com/u/0/100967975862533181994/posts", ""]
+]};
+make_menus();
+</script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){			
+		autosave();
+	});
+	
+	function autosave()
+	{
+		var t = setTimeout("autosave()", 20000); // Jalankan fungsi autosave setiap 20 detik sekali
+						
+		var judul = $("#txt_judul").val();
+		var konten = $("#txt_konten").val();
+			
+		if (judul.length > 0 || konten.length > 0)
+		{
+			$.ajax(
+			{
+				type: "POST",
+				url: "autosave.php",
+				data: "id_artikel=" + <?php echo $id_artikel ?> + "&judul=" + judul + "&konten=" + konten,
+				cache: false,
+				success: function(pesan)
+				{	
+					$("#waktu").empty().append(pesan);
+				}
+			});
+		}
+	} 
+	</script>
+
+<div class="wrap-body">
+
+<!--////////////////////////////////////Header-->
+<header>
+	<div class="wrap-header zerogrid">
+		<div class="row">
+			<div id="cssmenu">
+				<ul>
+				   <li class='active'><a href="index.html">Home</a></li>
+				   <li><a href="#">Galery</a>
+					  <ul>
+						 <li><a href="tele.html">Tele Photograph</a></li>
+						 <li><a href="fix.html">Fix Photograph</a></li>
+					  </ul>
+				   </li>
+				   <li><a href="single.html">About</a></li>
+				   <li><a href="contact.html">Contact</a></li>
+				</ul>
+			</div>
+			<class="logo"><img src="images/logo.png" />
+		</div>
+	</div>
+</header>
+
+
+<!--////////////////////////////////////Container-->
+
+    <h1 align="center">Share Your Motivation</h1>
+<div id="konten" style="margin:30px auto;">	
+	<form id="article_form" method="post" action="simpan.php">
+		Judul:<br />
+		<input type="text" name="judul" id="txt_judul" size="50" maxlength="50" class="normal-input"/><br />
+		Konten:<br />
+		<textarea name="konten" id="txt_konten" cols="50" rows="5" class="normal-textarea"></textarea><br />
+		<input type="hidden" name="id_artikel" value="<?php echo $id_artikel ?>" />
+		<input type="submit" value="Simpan" class="tombol" /><br />
+	</form>
+	<div id="waktu"></div>
+    <p>Setiap 20 detik data akan disimpan</p>
+</div>
+<!--////////////////////////////////////Footer-->
+<footer>
+	<div class="zerogrid">
+		<div class="wrap-footer">
+			<div class="copyright">
+				<span> © Copyright by <strong> AKM Photograph </span>
+			</div>
+		</div>
+	</div>
+</footer>
+
+</div>
+</body></html>
